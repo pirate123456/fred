@@ -1,0 +1,8 @@
+language: java
+before_install: wget http://www.bouncycastle.org/download/bcprov-jdk15on-147.jar -O lib/bcprov.jar
+install: ant dep -Dlib.contrib.get=true
+jdk:
+  - oraclejdk7
+  - openjdk7
+  - openjdk6
+
