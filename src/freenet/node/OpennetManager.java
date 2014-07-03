@@ -310,7 +310,14 @@ public class OpennetManager {
 			}
 		});
 		for(OpennetPeerNode opn: nodes) {
-		    (opn.isLongDistance() ? peersLRULong : peersLRUShort).push(opn);
+		    // Drop any peers which don't have a location yet. That means we haven't connected to 
+		    // them yet, and we need the location to decide which LRU to put them in ...
+		    // This should only be a problem with old nodes; we will include the location in new 
+		    // path folding noderefs...
+		    if(Location.isValid(opn.getLocation()))
+		        (opn.isLongDistance() ? peersLRULong : peersLRUShort).push(opn);
+		    else
+		        node.peers.disconnectAndRemove(opn, false, false, false);
 		}
 		if(logMINOR) {
 			Logger.minor(this, "My full compressed ref: "+crypto.myCompressedFullRef().length);
