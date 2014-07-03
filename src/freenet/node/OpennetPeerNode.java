@@ -276,4 +276,9 @@ public class OpennetPeerNode extends PeerNode {
 		return true;
 	}
 
+    public boolean isLongDistance() {
+        // FIXME OPTIMISE This should not change since we don't swap on opennet.
+        return Location.distance(this, opennet.node.getLocation()) > OpennetManager.LONG_DISTANCE;
+    }
+
 }
