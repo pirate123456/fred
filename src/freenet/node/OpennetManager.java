@@ -425,6 +425,11 @@ public class OpennetManager {
 
 	public boolean wantPeer(OpennetPeerNode nodeToAddNow, boolean addAtLRU, boolean justChecking, boolean oldOpennetPeer, ConnectionType connectionType) {
 	    if(nodeToAddNow != null) {
+	        if(!Location.isValid(nodeToAddNow.getLocation())) {
+	            // We use myCompressedFullRef(), so this shouldn't happen ... ???
+	            Logger.error(this, "Added opennet node reference must include a valid location", new Exception("error"));
+	            return false;
+	        }
 	        boolean isLong = nodeToAddNow.isLongDistance();
 	        return wantPeer(nodeToAddNow, addAtLRU, justChecking, oldOpennetPeer, connectionType, isLong);
 	    } else {
