@@ -276,4 +276,13 @@ public class OpennetPeerNode extends PeerNode {
 		return true;
 	}
 
+    public boolean isLongDistance() {
+        if(!Location.isValid(getLocation())) {
+            Logger.error(this, "No location on "+this, new Exception("debug"));
+            return false;
+        }
+        // FIXME OPTIMISE This should not change since we don't swap on opennet.
+        return Location.distance(this, opennet.node.getLocation()) > OpennetManager.LONG_DISTANCE;
+    }
+
 }

@@ -1416,7 +1416,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler {
 
 		// Promote if necessary
 		boolean dontWant = false;
-		if(oldOpennetPeer) {
+		if(oldOpennetPeer && pn instanceof OpennetPeerNode /* true */) {
 			OpennetManager opennet = node.getOpennet();
 			if(opennet == null) {
 				Logger.normal(this, "Dumping incoming old-opennet peer as opennet just turned off: "+pn+".");
@@ -1426,7 +1426,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler {
 			 * immediately dropped when there is no droppable peer to drop. If it was dropped
 			 * from the bottom of the LRU list, we would not have added it to the LRU; so it was
 			 * somewhere in the middle. */
-			if(!opennet.wantPeer(pn, false, false, true, ConnectionType.RECONNECT)) {
+			if(!opennet.wantPeer((OpennetPeerNode)pn, false, false, true, ConnectionType.RECONNECT)) {
 				Logger.normal(this, "No longer want peer "+pn+" - dumping it after connecting");
 				dontWant = true;
 				opennet.purgeOldOpennetPeer(pn);
@@ -1655,7 +1655,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler {
 
 		// Promote if necessary
 		boolean dontWant = false;
-		if(oldOpennetPeer) {
+		if(oldOpennetPeer && pn instanceof OpennetPeerNode /* true */) {
 			OpennetManager opennet = node.getOpennet();
 			if(opennet == null) {
 				Logger.normal(this, "Dumping incoming old-opennet peer as opennet just turned off: "+pn+".");
@@ -1665,7 +1665,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler {
 			 * immediately dropped when there is no droppable peer to drop. If it was dropped
 			 * from the bottom of the LRU list, we would not have added it to the LRU; so it was
 			 * somewhere in the middle. */
-			if(!opennet.wantPeer(pn, false, false, true, ConnectionType.RECONNECT)) {
+			if(!opennet.wantPeer((OpennetPeerNode)pn, false, false, true, ConnectionType.RECONNECT)) {
 				Logger.normal(this, "No longer want peer "+pn+" - dumping it after connecting");
 				dontWant = true;
 				opennet.purgeOldOpennetPeer(pn);
