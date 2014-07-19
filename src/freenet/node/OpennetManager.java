@@ -697,7 +697,7 @@ public class OpennetManager {
 	void dropExcessPeers(boolean longDistance) {
 	    LRUQueue<PeerNode> peersLRU = longDistance ? peersLRULong : peersLRUShort;
 		int maxPeers = getNumberOfConnectedPeersToAim(longDistance);
-		while(getSize() > maxPeers) {
+		while(peersLRU.size() > maxPeers) {
 			if(logMINOR)
 				Logger.minor(this, "Dropping opennet peers: currently "+peersLRU.size()+" of "+maxPeers+" for "+(longDistance ? "long" : "short")+" distance links");
 			PeerNode toDrop;
