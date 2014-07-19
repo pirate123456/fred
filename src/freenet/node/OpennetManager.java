@@ -513,7 +513,7 @@ public class OpennetManager {
 			}
 			if(nodeToAddNow != null)
 				connectionAttempts.put(connectionType, connectionAttempts.get(connectionType)+1);
-			if(getSize() < maxPeers || outdated) {
+			if(getSize(isLong) < maxPeers || outdated) {
 				if(nodeToAddNow != null) {
 					if(logMINOR) Logger.minor(this, "Added opennet peer "+nodeToAddNow+" as opennet peers list not full");
 					if(addAtLRU)
@@ -547,7 +547,7 @@ public class OpennetManager {
 		ArrayList<OpennetPeerNode> dropList = new ArrayList<OpennetPeerNode>();
 		maxPeers = getNumberOfConnectedPeersToAim();
 		synchronized(this) {
-			int size = getSize();
+			int size = getSize(isLong);
 			if(size == maxPeers && nodeToAddNow == null) {
 				// Allow an offer to be predicated on throwing out a connected node,
 				// provided that we meet the other criteria e.g. time since last added,
@@ -568,7 +568,7 @@ public class OpennetManager {
 						return false;
 					}
 				}
-			} else while(canAdd && (size = getSize()) > maxPeers - ((nodeToAddNow == null || outdated) ? 0 : 1)) {
+			} else while(canAdd && (size = getSize(isLong)) > maxPeers - ((nodeToAddNow == null || outdated) ? 0 : 1)) {
 				OpennetPeerNode toDrop;
 				// can drop peers which are over the limit
 				toDrop = peerToDrop(noDisconnect, false, nodeToAddNow != null, connectionType, maxPeers, isLong, peersLRU);
@@ -589,7 +589,7 @@ public class OpennetManager {
 				}
 				if(nodeToAddNow != null || size > maxPeers) {
 					if(logMINOR)
-						Logger.minor(this, "Drop opennet peer: "+toDrop+" (connected="+toDrop.isConnected()+") of "+peersLRU.size()+":"+getSize());
+						Logger.minor(this, "Drop opennet peer: "+toDrop+" (connected="+toDrop.isConnected()+") of "+peersLRU.size()+":"+getSize(isLong));
 					peersLRU.remove(toDrop);
 					dropList.add(toDrop);
 				}
@@ -717,10 +717,6 @@ public class OpennetManager {
 	// It can however be dumped if it doesn't connect in a reasonable time, and if
 	// it upgrades, it may not have the usual grace period.
 	
-	synchronized public int getSize() {
-	    return getSize(true) + getSize(false);
-	}
-	
 	/**
 	 * How many opennet peers do we have?
 	 * Connected but out of date nodes don't count towards the connection limit. Let them connect for
@@ -738,7 +734,7 @@ public class OpennetManager {
 	}
 
 	private OpennetPeerNode peerToDrop(boolean noDisconnect, boolean force, boolean addingNode, ConnectionType connectionType, int maxPeers, boolean isLong, LRUQueue<PeerNode> peersLRU) {
-		if(getSize() < maxPeers) {
+		if(getSize(isLong) < maxPeers) {
 			// Don't drop any peers
 			if(logMINOR) Logger.minor(this, "peerToDrop(): Not dropping any peer (force="+force+" addingNode="+addingNode+") because don't need to");
 			return null;
