@@ -464,7 +464,7 @@ public class OpennetManager {
 		boolean notMany = false;
 		boolean noDisconnect;
 		long now = System.currentTimeMillis();
-		if(logMINOR) Logger.minor(this, "wantPeer("+addAtLRU+","+justChecking+","+oldOpennetPeer+","+connectionType+")");
+		if(logMINOR) Logger.minor(this, "wantPeer("+(nodeToAddNow != null) + "," +addAtLRU+","+justChecking+","+oldOpennetPeer+","+connectionType+","+isLong+")");
 		boolean outdated = nodeToAddNow == null ? false : nodeToAddNow.isUnroutableOlderVersion();
 		if(outdated && logMINOR) Logger.minor(this, "Peer is outdated: "+nodeToAddNow.getVersionNumber()+" for "+connectionType);
 		if(outdated) {
@@ -503,6 +503,7 @@ public class OpennetManager {
 			}
 		}
 		int maxPeers = getNumberOfConnectedPeersToAim(isLong);
+		if(logMINOR) Logger.minor(this, "Peers target: "+maxPeers);
 		synchronized(this) {
 			if(nodeToAddNow != null &&
 					peersLRU.contains(nodeToAddNow)) {
@@ -698,7 +699,7 @@ public class OpennetManager {
 		int maxPeers = getNumberOfConnectedPeersToAim(longDistance);
 		while(getSize() > maxPeers) {
 			if(logMINOR)
-				Logger.minor(this, "Dropping opennet peers: currently "+peersLRU.size());
+				Logger.minor(this, "Dropping opennet peers: currently "+peersLRU.size()+" of "+maxPeers+" for "+(longDistance ? "long" : "short")+" distance links");
 			PeerNode toDrop;
 			toDrop = peerToDrop(false, false, false, null, maxPeers, longDistance, peersLRU);
 			if(toDrop == null) toDrop = peerToDrop(false, true, false, null, maxPeers, longDistance, peersLRU);
