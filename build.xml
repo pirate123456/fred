@@ -11,7 +11,7 @@ dependencies and requirements, and will try to satisfy these if they are not
 available (possibly using *pre-built blobs*).
 	</description>
 
-	<import file="build-clean.xml"/>
+	<import file="build-clean.xml" />
 	<property name="contrib.ant" value="${lib.contrib.dir}/../build.xml"/>
 	<property name="get.contrib.dir" value="https://downloads.freenetproject.org/latest"/>
 	<available property="contrib.present" file="${contrib.ant}"/>
